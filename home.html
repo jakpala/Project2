@@ -82,8 +82,8 @@
 </div>
 
 <!--<b>Start: </b>-->
-<div id="start">
-    <!--<div value="4202 e fowler ave, tampa, 33620">USF</div>-->
+<div id="start1">
+    <div id = "start" value="4202 e fowler ave, tampa, 33620">USF</div>
 </div>
 <!--<b>End: </b>-->
 <div id="end">
@@ -93,12 +93,19 @@
 <script>
     var start = "4202 e fowler ave, tampa, 33620";
 
-    var xhttp = new XMLHttpRequest();
-    xhttp.open("GET", "http://localhost:8081/api/home",false);
-    xhttp.send();
-    var address = xhttp.responseText;
+    var xhttp1 = new XMLHttpRequest();
+    xhttp1.open("GET", "http://localhost:8081/api/home",false);
+    xhttp1.send();
+    var CurrentLocation = xhttp.responseText;
+    document.getElementById("start").innerHTML = address;
+
+    var xhttp2 = new XMLHttpRequest();
+    xhttp2.open("POST", "http://localhost:8081/api/home",false);
+    xhttp2.send();
+    var CourtAddress = xhttp.responseText;
     console.log(address);
     document.getElementById("end").innerHTML = address;
+
 
     var map;
     function initMap() {
@@ -127,8 +134,8 @@
             calculateAndDisplayRoute(
                 directionsDisplay, directionsService, markerArray, stepDisplay, map);
         };
-        //document.getElementById('start').addEventListener('change', onChangeHandler);
-        //document.getElementById('end').addEventListener('change', onChangeHandler);
+        // document.getElementById('start').addEventListener('change', onChangeHandler);
+        // document.getElementById('end').addEventListener('change', onChangeHandler);
     }
 
     function calculateAndDisplayRoute(directionsDisplay, directionsService,
@@ -141,17 +148,17 @@
         // Retrieve the start and end locations and create a DirectionsRequest using
         // WALKING directions.
         directionsService.route({
-            origin: document.getElementById('start').innerHTML=start,
-            destination: document.getElementById('end').innerHTML=address,
+            origin: CurrentLocation,
+            destination: CourtAddress,
             travelMode: 'WALKING'
         }, function(response, status) {
             // Route the directions and pass the response to a function to create
             // markers for each step.
             if (status === 'OK') {
-                document.getElementById('warnings-panel').innerHTML =
-                    '<b>' + response.routes[0].warnings + '</b>';
+                // document.getElementById('warnings-panel').innerHTML =
+                //     '<b>' + response.routes[0].warnings + '</b>';
                 directionsDisplay.setDirections(response);
-                //showSteps(response, markerArray, stepDisplay, map);
+                showSteps(response, markerArray, stepDisplay, map);
             } else {
                 window.alert('Directions request failed due to ' + status);
             }
